@@ -1,0 +1,576 @@
+
+<script crossorigin="anonymous" defer="defer" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+<script crossorigin="anonymous" defer="defer" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="{{ 'index.js' | asset_url }}" defer></script>
+<script src="{{ 'app.js' | asset_url }}" defer></script>
+
+<style>
+/* defaults */
+/* =============================================== */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+
+a,
+a:link {
+  font-family: inherit;
+  text-decoration: none;
+}
+
+/* modal */
+/* =============================================== */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  background: hsla(0, 0%, 40%, .6);
+}
+
+/* using :target */
+.modal-container:target {
+  display: flex;
+}
+
+.modal {
+  width: 60rem;
+  padding: 4rem 2rem;
+  border-radius: .8rem;
+
+  color: var(--light);
+  background: var(--background);
+  box-shadow: .4rem .4rem 2.4rem .2rem hsla(236, 50%, 50%, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.modal__details {
+  text-align: center;
+
+  margin-bottom: 4rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid hsla(0, 0%, 100%, .4);
+}
+
+.modal__title {
+  font-size: 3.2rem;
+}
+
+.modal__description {
+  margin-top: 2rem;
+
+  font-size: 1.6rem;
+  font-style: italic;
+}
+
+.modal__text {
+  padding: 0 4rem;
+  margin-bottom: 4rem;
+
+  font-size: 1.6rem;
+  line-height: 2;
+}
+
+.modal__text::before {
+  content: '';
+
+  position: absolute;
+  top: 0%;
+  left: 100%;
+  transform: translate(-50%, -50%);
+
+  width: 18rem;
+  height: 18rem;
+  border: 1px solid hsla(0, 0%, 100%, .2);
+  border-radius: 100rem;
+
+  pointer-events: none;
+}
+
+.modal__btn {
+  padding: 1rem 1.6rem;
+  border: 1px solid hsla(0, 0%, 100%, .4);
+  border-radius: 100rem;
+
+  color: inherit;
+  background: transparent;
+  font-size: 1.4rem;
+  font-family: inherit;
+  letter-spacing: .2rem;
+
+  transition: .2s;
+  cursor: pointer;
+}
+
+.modal__btn:hover,
+.modal__btn:focus {
+  border-color: hsla(0, 0%, 100%, .6);
+  transform: translateY(-.2rem);
+}
+
+/* links */
+/* =============================================== */
+.link-1 {
+  font-size: 1.8rem;
+
+  color: var(--light);
+  box-shadow: .4rem .4rem 2.4rem .2rem hsla(236, 50%, 50%, 0.3);
+  width:100%;
+  padding: 1.4rem 3.2rem;
+
+  transition: .2s;
+}
+
+.link-1:hover,
+.link-1:focus {
+  transform: translateY(-.2rem);
+  box-shadow: 0 0 4.4rem .2rem hsla(236, 50%, 50%, 0.4);
+}
+
+.link-2 {
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid hsla(0, 0%, 100%, .4);
+  border-radius: 100rem;
+
+  color: inherit;
+  font-size: 2.2rem;
+
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: .2s;
+}
+
+.link-2::before {
+  content: '×';
+
+  transform: translateY(-.1rem);
+}
+
+.link-2:hover,
+.link-2:focus {
+  border-color: hsla(0, 0%, 100%, .6);
+  transform: translateY(-.2rem);
+}
+
+/* Second Version Link */
+/* =============================================== */
+.second-version-link,
+.second-version-link:link {
+  color: hsl(236, 50%, 50%);
+  padding: .8rem 1.6rem .8rem .2rem;
+  border-bottom: 2px solid hsl(236, 50%, 50%);
+
+  font-size: 1.4rem;
+  font-weight: bold;
+
+  position: absolute;
+  top: 4rem;
+  right: 4rem;
+}
+
+.second-version-link::after {
+  content: '\2197';
+
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  font-size: .9em;
+}
+
+.abs-site-link {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  color: hsla(0, 0%, 0%, .6);
+  font-size: 1.6rem;
+}
+
+.signup{
+	position: relative;
+	width:100%;
+	height: 100%;
+}
+.registrationLabel{
+	color: #fff;
+	font-size: 2.3em;
+	justify-content: center;
+	display: flex;
+	margin: 60px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: .5s ease-in-out;
+}
+.registrationInputs{
+
+	width: 60%;
+	background: #e0dede;
+	justify-content: center;
+	display: flex;
+	margin: 20px auto;
+	padding: 10px;
+	border: none;
+	outline: none;
+	border-radius: 5px;
+}
+
+
+button::hover{
+    background-color:white;
+}
+
+::placeholder {
+  color: black;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.eo-sh-waiting-list-button{
+    margin-top:25px;
+    display:none;
+    font-size:1.8rem;
+}
+
+.eo-sh-modals {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.eo-sh-modal-content {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color:white;
+    padding: 4rem 2rem;
+    width: 60rem;
+    border-radius: 0.8rem;
+}
+
+.eo-sh-close-button {
+    width: 4rem;
+    height: 4rem;
+    border: 1px solid hsla(0, 0%, 100%, .4);
+    border-radius: 100rem;
+    color: inherit;
+    font-size: 2.2rem;
+    position: absolute;
+    top: 0rem;
+    right: 0rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .2s;
+}
+
+
+.eo-sh-close-button:hover,
+.eo-sh-close-button:focus {
+  border-color: hsla(0, 0%, 100%, .6);
+  transform: translateY(-.2rem);
+}
+
+
+.show-modal {
+    z-index:111;
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.eo-sh-heading{
+    margin-top:-35px;
+    float:left;
+    font-size: 2.3em;
+    justify-content: center;
+    pointer;transition: .5s ease-in-out;
+}
+
+hr{
+    width:100%;
+    margin-top:0px;
+}
+
+.eo-sh-form label{
+    margin-bottom:2px;
+}
+
+.eo-sh-form input{
+    width:100%;
+	justify-content: center;
+	display: flex;
+	margin: 0px auto;
+	padding: 10px;
+}
+
+
+#eo-sh-login-form-button,
+#eo-sh-register-form-button{
+    width: auto;
+    float:right;
+    height: auto;
+    padding:15px;
+    display: block;
+    color: #fff;
+    background: #573b8a;
+    font-weight: bold;
+    margin-top: 15px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+}
+
+#eo-sh-register-button,
+#eo-sh-login-button{
+    width: auto;
+    float:right;
+    height: auto;
+    padding:15px;
+    display: block;
+    color: #fff;
+    background: #573b8a;
+    font-weight: bold;
+    margin-top: 15px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    margin-right:4px;
+}
+
+#eo-sh-login-email-error ul li,
+#eo-sh-login-password-error ul li,
+#eo-sh-register-email-error ul li,
+#eo-sh-register-password-error ul li{
+    color:#D8000C;
+    font-size:18px;
+    display:none;
+}
+
+#eo-sh-register-div{
+    display:none;
+}
+</style>
+
+
+<a href="#modal-opened" class="link-1" style="display:none;">Open Modal</a>
+
+<button class="eo-sh-waiting-list-button" >Contact Us!</button>
+
+<div class="eo-sh-modals">
+    <div class="eo-sh-modal-content" id="eo-sh-login-div">
+     <div style="display:flex">
+      <h1 class="eo-sh-heading">Login</h1>
+      <span class="eo-sh-close-button">&times;</span>
+     </div>
+    <hr>
+        <div style="margin-top:-30px;">
+			<form method="post" class="eo-sh-form" action="/account/login" accept-charset="UTF-8" id="customer_login" novalidate autocomplete="off">
+             <div>
+                <input type="hidden" name="form_type" value="recover_customer_password">
+                <input type="hidden" name="utf8" value="✓">
+             	<label aria-hidden="true">Email</label>
+				<input type="email" name="customer[email]" id="eo-sh-login-email CustomerEmail" autocomplete="email" autocorrect="off" autocapitalize="off">
+             	<label aria-hidden="true">Password</label>
+                <input type="password" name="customer[password]" id="eo-sh-login-password CustomerPassword" autocomplete="current-password">
+             </div>
+				<button type="submit"  id="eo-sh-login-form-button">Login</button>
+                 <input type="hidden" name="checkout_url" id="checkout_url" value="">
+
+            </form>
+            <button type="submit" id="eo-sh-register-button">Register</button>
+        </div>
+    </div>
+
+
+
+    <div class="eo-sh-modal-content" id="eo-sh-register-div" >
+     <div style="display:flex">
+      <h1 class="eo-sh-heading">Register</h1>
+      <span class="eo-sh-close-button" id="eo-sh-close-button">&times;</span>
+     </div>
+    <hr>
+        <div style="margin-top:-30px;">
+			<form class="eo-sh-form" accept-charset="UTF-8" novalidate autocomplete="off">
+             <div>
+             	<label aria-hidden="true">Email</label>
+				<input type="email" name="email" id="eo-sh-register-email">
+                <label id="eo-sh-register-email-error">
+                    <ul style="margin-left:12px;">
+                        <li>
+                            Email is required
+                        </li>
+                    </ul>
+                </label>
+             	<label aria-hidden="true">Password</label>
+                <input type="password" name="password" id="eo-sh-register-password">
+                <label id="eo-sh-register-password-error">
+                    <ul style="margin-left:12px;">
+                        <li>
+                            Password is required
+                        </li>
+                    </ul>
+                </label>
+             </div>
+				<button type="submit"  id="eo-sh-register-form-button">Register</button>
+            </form>
+            <button type="submit" id="eo-sh-login-button">Login</button>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal-container" id="modal-opened" >
+    <div class="modal">
+        <div id="loginForm">
+			<form method="post" action="/account/login" accept-charset="UTF-8" novalidate autocomplete="off">
+				<label for="chk" aria-hidden="true" style="margin-top:10px; color: #fff; font-size: 2.3em;justify-content: center; display: flex;margin: 60px; font-weight: bold; cursor: pointer;transition: .5s ease-in-out;">Login</label>
+                <div style="margin-top:-38px;">
+                <input type="hidden" name="form_type" value="recover_customer_password">
+                <input type="hidden" name="utf8" value="✓">
+				<input type="email" name="customer[email]" id="CustomerEmail" class="registrationInputs" id="CustomerEmail" autocomplete="email" autocorrect="off" autocapitalize="off" placeholder="Email">
+                <input type="password" value="" name="customer[password]" id="CustomerPassword" autocomplete="current-password" class="registrationInputs" placeholder="Password">
+            </div>
+
+				<button type="submit" id="customerLogin" style="width: 60%; height: 40px; margin: -15px auto; justify-content: center; display: block; color: #fff; background: #573b8a; font-size: 1em; font-weight: bold; margin-top: 20px;outline: none; border: none; border-radius: 5px; transition: .2s ease-in; cursor: pointer;">Login</button>
+            </form>
+
+                <button id="signup" style="margin-top:0px; width: 60%;height: 40px; margin: 10px auto; justify-content: center; display: block; color: #fff; background: #573b8a; font-size: 1em; font-weight: bold;margin-top: 20px; outline: none; border: none; border-radius: 5px; transition: .2s ease-in; cursor: pointer;">Signup</button>
+
+        </div>
+
+        <div class="signup" style="display:none;" id="signUpForm">
+			<form id="signupforms"  novalidate  autocomplete="off">
+				<label for="chk" aria-hidden="true" style="margin-top:10px; color: #fff; font-size: 2.3em;justify-content: center; display: flex;margin: 60px; font-weight: bold; cursor: pointer;transition: .5s ease-in-out;">Signup</label>
+
+                <label class="error_title fieldErrors default-hidden" id="errors"  style="display:none;">
+                    <ul style="margin-left:120px;">
+                        <li style="color:#D8000C; font-size:14px; margin-bottom:60px;margin-top:-60px;">
+
+                        </li>
+                    </ul>
+                </label>
+
+                <label class=" fieldErrors default-hidden" id="successMessage"  style="display:none;">
+                    <ul style="margin-left:120px;">
+                        <li style="color:#008000; font-size:14px; margin-bottom:60px;margin-top:-60px;">
+
+                        </li>
+                    </ul>
+                </label>
+
+
+                <div style="margin-top:-38px;">
+                    <input type="text" name="firstName" id="signUpFirstName" placeholder="First Name" class="registrationInputs" style="height::44px;">
+                    <label class="error_title fieldErrors default-hidden" id="FirstNameError" style="display:none;">
+                        <ul style="margin-top:-15px;margin-bottom:-15px;margin-left:120px;">
+                            <li style="color:#D8000C; font-size:14px; padding:0px;">
+                            First Name field is required
+                            </li>
+                        </ul>
+                    </label>
+                    <input type="text" name="lastName" id="signUpLastName" placeholder="Last Name" class="registrationInputs" style="height::44px;">
+                    <label class="error_title fieldErrors default-hidden" id="lastNameError" style="display:none;">
+                        <ul style="margin-top:-15px;margin-bottom:-15px;margin-left:120px;">
+                            <li style="color:#D8000C; font-size:14px; padding:0px;">
+                            Last Name field is required
+                            </li>
+                        </ul>
+                    </label>
+					<input type="email" name="email" id="signUpEmail" placeholder="Email" class="registrationInputs" style="height::44px;">
+                      <label class="error_title fieldErrors default-hidden" id="emailError" style="display:none;">
+                        <ul style="margin-top:-15px;margin-bottom:-15px;margin-left:120px;">
+                            <li style="color:#D8000C; font-size:14px; padding:0px;">
+                            Email is required
+                            </li>
+                        </ul>
+                    </label>
+					<input type="password" name="password" id="signUpPassword" placeholder="Password" class="registrationInputs" style="height::44px;">
+                    <label class="error_title fieldErrors default-hidden" id="passwordError" style="display:none;" >
+                        <ul style="margin-top:-15px;margin-bottom:-15px;margin-left:120px;">
+                            <li style="color:#D8000C; font-size:14px; padding:0px;">
+                            password is required
+                            </li>
+                        </ul>
+                    </label>
+
+                </div>
+
+                <button id="signupbutton" style="margin-top:0px; width: 60%;height: 40px; margin: -15px auto; justify-content: center; display: block; color: #fff; background: #573b8a; font-size: 1em; font-weight: bold;margin-top: 20px; outline: none; border: none; border-radius: 5px; transition: .2s ease-in; cursor: pointer;">Sign up</button>
+
+				<button id="login" style="width: 60%; height: 40px; margin: -15px auto; justify-content: center; display: block; color: #fff; background: #573b8a; font-size: 1em; font-weight: bold; margin-top: 20px;outline: none; border: none; border-radius: 5px; transition: .2s ease-in; cursor: pointer;">Login</button>
+
+
+			</form>
+        </div>
+    <a href="#modal-closed" class="link-2" id="close-model"> </a>
+
+  </div>
+</div>
+
+
+
+{% schema %}
+
+  {
+    "name": "Product Waiting List",
+    "target": "section",
+    "settings": [
+
+        {
+            "label": "Color",
+            "id": "color",
+            "type": "color",
+            "default": "#000000"
+        }
+
+    ]
+  }
+
+{% endschema %}
