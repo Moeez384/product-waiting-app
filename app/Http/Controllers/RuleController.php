@@ -251,15 +251,24 @@ class RuleController extends Controller
         $ruleSettings = Rule::where('user_id', Auth::user()->id)
             ->where(
                 function ($query) use ($search) {
-                    $query->where('title', 'like', '%' . $search . '%')
+                    return $query->where('title', 'like', '%' . $search . '%')
                         ->orWhere('status', 'like', '%' . $search . '%')
                         ->orWhere('no_of_customers', 'like', '%' . $search . '%')
                         ->orWhere('start_date', 'like', '%' . $search . '%')
-                        ->orWhere('end_date', 'like', '%' . $search . '%');
+                        ->orWhere('end_date', 'like', '%' . $search . '%')
+                        ->orWhere(
+                            function ($query) use ($search) {
+                                $query->whereHas(
+                                    'categories',
+                                    function ($query) use ($search) {
+                                        return $query->where('title', 'like', '%' . $search . '%');
+                                    }
+                                );
+                            }
+                        );
                 }
             )
             ->orderBy('id', 'desc')
-            ->with('categories')
             ->simplePaginate(5);
 
         return view('rules.pagination_data', compact('ruleSettings'))->render();

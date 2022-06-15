@@ -58,9 +58,6 @@
                         <li class="active" id="ruleLi">
                             <a href="#"><i class="icon-edit append-spacing" id="ruleSettings"></i> Rule </a>
                         </li>
-                        {{-- <li id="productLi">
-                            <a href="#"><i class="icon-pages append-spacing" id="products"></i>Products</a>
-                        </li> --}}
                     </ul>
                     {!! Form::open(['id' => 'product-rule-settings']) !!}
                     {{ Form::hidden('id', $ruleSettings['id'], ['id' => 'id']) }}
@@ -89,25 +86,22 @@
                                     </div>
                                     <div class="columns seven">
                                         {{ Form::text('title', $ruleSettings['title'], ['placeholder' => 'Enter rule title', 'id' => 'title']) }}
-                                        <label class="error_title fieldErrors default-hidden" id="titleError">
-                                            <ul>
-                                                <li style="color:#D8000C; font-size:14px;"></li>
-                                            </ul>
+                                        <label class="error_title fieldErrors default-hidden"
+                                            style="color:#D8000C; font-size:14px;" id="titleError">
+
                                         </label>
                                     </div>
                                 </div>
                                 <br />
                                 <div class="row">
                                     <div class="columns five">
-                                        {{ Form::label('no_of_customers', 'Set No. of Customer') }}
+                                        {{ Form::label('no_of_customers', 'Set No of Customer') }}
                                     </div>
                                     <div class="columns seven">
 
                                         {{ Form::number('no_of_customers', $ruleSettings['no_of_customers'], ['min' => 1, 'placeholder' => 'Set the number of customers', 'id' => 'noOfcustomers']) }}
-                                        <label class="error_title fieldErrors default-hidden" id="noOfCutomerError">
-                                            <ul>
-                                                <li style="color:#D8000C; font-size:14px;"></li>
-                                            </ul>
+                                        <label class="error_title fieldErrors default-hidden" style="color:#D8000C;"
+                                            id="noOfCutomerError">
                                         </label>
                                     </div>
                                 </div>
@@ -118,10 +112,8 @@
                                     </div>
                                     <div class="columns seven">
                                         {{ Form::text('start_date', $ruleSettings['start_date'], ['placeholder' => 'Enter Start Date', 'class' => 'datepicker', 'id' => 'start_date']) }}
-                                        <label class="error_title fieldErrors default-hidden" id="startDateError">
-                                            <ul>
-                                                <li style="color:#D8000C; font-size:14px;"></li>
-                                            </ul>
+                                        <label class="error_title fieldErrors default-hidden"
+                                            style="color:#D8000C; font-size:14px;" id="startDateError">
                                         </label>
                                     </div>
                                 </div>
@@ -134,10 +126,9 @@
                                     </div>
                                     <div class="columns seven">
                                         {{ Form::text('end_date', $ruleSettings['end_date'], ['placeholder' => 'Enter End Date', 'class' => 'datepicker', 'id' => 'end_date']) }}
-                                        <label class="error_title fieldErrors default-hidden" id="endDateError">
-                                            <ul>
-                                                <li style="color:#D8000C; font-size:14px;"></li>
-                                            </ul>
+                                        <label class="error_title fieldErrors default-hidden"
+                                            style="color:#D8000C; font-size:14px;" id="endDateError">
+
                                         </label>
                                     </div>
                                 </div>
@@ -150,11 +141,8 @@
                                         </div>
                                         <div class="columns seven">
                                             {!! Form::select('products[]', ['pr' => 'xyz', 'c' => 'zbc'], null, ['id' => 'product', 'placeholder' => 'Please Select the Product', 'multiple' => 'multiple', 'class' => 'myselect', 'style' => 'width:100%']) !!}
-                                            <label class="error_title fieldErrors default-hidden" id="productError">
-                                                <ul>
-                                                    <li style="color:#D8000C; font-size:14px;">
-                                                    </li>
-                                                </ul>
+                                            <label class="error_title fieldErrors default-hidden"
+                                                style="color:#D8000C; font-size:14px;" id="productError">
                                             </label>
                                         </div>
                                     </div>
@@ -170,11 +158,8 @@
                                                         {{ $category->title }}</option>
                                                 @endforeach
                                             </select>
-                                            <label class="error_title fieldErrors default-hidden" id="productError">
-                                                <ul>
-                                                    <li style="color:#D8000C; font-size:14px;">
-                                                    </li>
-                                                </ul>
+                                            <label class="error_title fieldErrors default-hidden"
+                                                style="color:#D8000C; font-size:14px;" id="productError">
                                             </label>
                                         </div>
                                     </div>

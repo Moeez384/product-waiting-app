@@ -22,4 +22,13 @@ class Rule extends Model
     {
         return $this->hasMany(Category::class);
     }
+
+    public function getStatusAttribute($value)
+    {
+        if ($value == 1) {
+            return "Active";
+        } else {
+            return "Not Active";
+        }
+    }
 }

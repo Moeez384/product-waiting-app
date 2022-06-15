@@ -4,7 +4,7 @@
              <tr>
                  <th class="align-center"><strong>Rule ID</strong></th>
                  <th class="align-center"><strong>Rule Title</strong></th>
-                 <th class="align-center"><strong>Products/Collection</strong></th>
+                 <th class="align-center"><strong>Products</strong></th>
                  <th class="align-center"><strong>Start Date</strong></th>
                  <th class="align-center"><strong>End Date</strong></th>
                  <th class="align-center"><strong>Status</strong></th>

@@ -70,9 +70,12 @@ $(document).ready(() => {
                 $('.success-message').html(`<div class="alert success"><dl><dt>Success</dt><dd>` + response + `! </dd></dl></div>`).show();
 
                 $(".app-loader").hide();
+                $("html, body").animate({
+                    scrollTop: 0
+                }, 700);
                 setTimeout(() => {
                     $(".success-message").hide();
-                }, 2000);
+                }, 4000);
 
             },
             error: function(reject) {
@@ -80,24 +83,24 @@ $(document).ready(() => {
                 if (reject.responseJSON.errors) {
 
                     if (reject.responseJSON.errors.title) {
-                        $("#titleError").show()
-                        $("#titleError ul li").text(reject.responseJSON.errors.title[0]);
+                        $("#titleError").show();
+                        $("#titleError").text(reject.responseJSON.errors.title[0]);
                     }
                     if (reject.responseJSON.errors.no_of_customers) {
-                        $("#noOfCutomerError").show()
-                        $("#noOfCutomerError ul li").text(reject.responseJSON.errors.no_of_customers[0]);
+                        $("#noOfCutomerError").show();
+                        $("#noOfCutomerError").text(reject.responseJSON.errors.no_of_customers[0]);
                     }
                     if (reject.responseJSON.errors.start_date) {
-                        $("#startDateError").show()
-                        $("#startDateError ul li").text(reject.responseJSON.errors.start_date[0]);
+                        $("#startDateError").show();
+                        $("#startDateError").text(reject.responseJSON.errors.start_date[0]);
                     }
                     if (reject.responseJSON.errors.end_date) {
-                        $("#endDateError").show()
-                        $("#endDateError ul li").text(reject.responseJSON.errors.end_date[0]);
+                        $("#endDateError").show();
+                        $("#endDateError").text(reject.responseJSON.errors.end_date[0]);
                     }
                     if (reject.responseJSON.errors.products) {
-                        $("#productError").show()
-                        $("#productError ul li").text(reject.responseJSON.errors.products[0]);
+                        $("#productError").show();
+                        $("#productError").text(reject.responseJSON.errors.products[0]);
                     }
                 }
 
@@ -111,7 +114,7 @@ $(document).ready(() => {
                 setTimeout(() => {
                     $(".error-message").hide();
                     $(".exception-error").text("Error");
-                }, 3000);
+                }, 4000);
                 $("html, body").animate({
                     scrollTop: 0
                 }, 700);
@@ -119,7 +122,7 @@ $(document).ready(() => {
                 $(".btn-save").prop("disabled", false);
                 setTimeout(() => {
                     $(".fieldErrors").hide();
-                }, 3000);
+                }, 4000);
                 $(".app-loader").hide();
             }
         });

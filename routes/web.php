@@ -29,6 +29,9 @@ Route::group(
         Route::post('/general-settings-save', [SettingController::class, 'save'])
             ->name('general.settings.save');
 
+        Route::post('/messages-save', [SettingController::class, 'saveMessages'])
+            ->name('messages.save');
+
         Route::get('/rules-index', [RuleController::class, 'index'])->name('rules.index');
 
         Route::get('/rules-create', [RuleController::class, 'create'])->name('rules.create');

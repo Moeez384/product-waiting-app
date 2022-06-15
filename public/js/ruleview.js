@@ -95,10 +95,12 @@ $(document).ready(() => {
                 $("#message").html("Rule Deleted Successfully");
 
                 $(".app-loader").hide();
-
+                $("html, body").animate({
+                    scrollTop: 0
+                }, 700);
                 setTimeout(() => {
                     $(".success-message-1").hide();
-                }, 2000);
+                }, 4000);
             },
             error: (reject) => {
 
@@ -109,7 +111,7 @@ $(document).ready(() => {
                 setTimeout(() => {
                     $(".error-message").hide();
                     $(".exception-error").text("Error");
-                }, 3000);
+                }, 4000);
                 $(".app-loader").hide();
                 $("html, body").animate({
                     scrollTop: 0
@@ -137,14 +139,14 @@ $(document).ready(() => {
                 $(".app-loader").hide();
                 setTimeout(() => {
                     $(".success-message").hide();
-                }, 3000);
+                }, 4000);
             },
             error: function(response) {
                 $(".app-loader").hide();
                 setTimeout(() => {
                     $(".error-message").hide();
                     $(".exception-error").text("Error");
-                }, 3000);
+                }, 4000);
             }
         });
     });

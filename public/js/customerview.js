@@ -24,7 +24,7 @@ $(document).ready(() => {
                 $(".app-loader").hide();
                 setTimeout(() => {
                     $(".success-message").hide();
-                }, 2000);
+                }, 4000);
             },
             error: function(response) {
                 if (response.status == 404) {
@@ -36,7 +36,7 @@ $(document).ready(() => {
                 setTimeout(() => {
                     $(".error-message").hide();
                     $(".exception-error").text("Error");
-                }, 3000);
+                }, 4000);
             }
         });
     });
@@ -57,14 +57,14 @@ $(document).ready(() => {
                 $(".app-loader").hide();
                 setTimeout(() => {
                     $(".success-message").hide();
-                }, 3000);
+                }, 4000);
             },
             error: function(response) {
                 $(".app-loader").hide();
                 setTimeout(() => {
                     $(".error-message").hide();
                     $(".exception-error").text("Error");
-                }, 3000);
+                }, 4000);
             }
         });
     });
