@@ -186,15 +186,14 @@ class RuleController extends Controller
             return $checkCategory;
         } else {
             try {
-
-                Rule::where('id', $data['id'])
+                $rule = Rule::where('id', $data['id'])
                     ->where('user_id', Auth::user()->id)
                     ->update([
                         'status' => $data['status'],
                         'title' => $data['title'],
                         'no_of_customers' => $data['no_of_customers'],
-                        'start_date' => $data['start_date'],
-                        'end_date' => $data['end_date'],
+                        'start_date' => Carbon::parse($data['start_date']),
+                        'end_date' => Carbon::parse($data['end_date']),
                     ]);
 
                 Category::where('rule_id', $id)->delete();

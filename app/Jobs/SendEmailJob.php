@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\Customer;
 use App\Mail\SendEmailCsv;
 use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 
 class SendEmailJob implements ShouldQueue
 {
@@ -46,7 +47,6 @@ class SendEmailJob implements ShouldQueue
         $filename =  public_path('files/' . $file);
         $handle = fopen($filename, 'w');
         fputcsv($handle, [
-            "Full Name",
             "Email",
             "Status",
             "Product Title",
@@ -54,15 +54,14 @@ class SendEmailJob implements ShouldQueue
         foreach ($customers as $customer) {
             foreach ($customer->categories as $category) {
                 fputcsv($handle, [
-                    $customer->full_name,
                     $customer->email,
-                    $customer->status,
+                    $customer->status == 1 ? 'Active' : 'Not Active',
                     $category->title,
                 ]);
             }
         }
         fclose($handle);
-
-        Mail::to('your_rseceiver_email@gmail.com')->send(new \App\Mail\SendEmailCsv($file));
+        $user = User::find($this->user_id);
+        Mail::to('admin@gmail.com')->send(new \App\Mail\SendEmailCsv($file));
     }
 }

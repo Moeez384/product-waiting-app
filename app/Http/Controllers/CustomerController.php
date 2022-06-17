@@ -15,6 +15,7 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Js;
+use App\Jobs\ChangeStatusJob;
 
 class CustomerController extends Controller
 {
@@ -60,7 +61,7 @@ class CustomerController extends Controller
                     'status' => $status,
                 ]);
 
-            Mail::to('dummy_email@gmail.com')->send(new \App\Mail\SendStatusConfirmationMail($status));
+            dispatch(new ChangeStatusJob($customer->id));
 
             $result['message'] = "Customer Status Updated Successfully";
             $result['status'] = $status;

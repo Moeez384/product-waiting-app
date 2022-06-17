@@ -10,8 +10,7 @@
                         <i class="icon-question append-spacing"></i>
                         <span>User Guide</span>
                     </a>
-                    <a class="link" target="_blank" style="padding-left: 1rem;"
-                        href="https://support.extendons.com/">
+                    <a class="link" target="_blank" style="padding-left: 1rem;" href="https://support.extendons.com/">
                         <span>Get Support</span>
                     </a>
                 </div>
@@ -152,7 +151,8 @@
                                             {{ Form::label('Products', 'Products') }}
                                         </div>
                                         <div class="columns seven">
-                                            <select name="products[]" id="product" multiple="multiple" style="width: 100%;">
+                                            <select name="products[]" id="product" multiple="multiple"
+                                                style="width: 100%;">
                                                 @foreach ($ruleSettings->categories as $category)
                                                     <option value="{{ $category->product_or_collection_id }}" selected>
                                                         {{ $category->title }}</option>
