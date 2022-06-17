@@ -8,7 +8,7 @@ $(document).ready(function() {
     $("#eo-sh-login-button").click((e) => {
         $("#eo-sh-login-div").show();
         $("#eo-sh-register-div").hide();
-    })
+    });
 
     $("#signup").click((e) => {
         e.preventDefault();
