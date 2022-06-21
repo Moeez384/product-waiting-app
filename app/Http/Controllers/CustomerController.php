@@ -140,7 +140,7 @@ class CustomerController extends Controller
                 'send_email_welcome' => false,
                 'password' => $request->password,
                 'password_confirmation' => $request->password,
-                'tags' => 'Login with from Product waiting list app',
+                'tags' => 'Login from Product waiting list app',
             ]]);
 
             if ($result['status'] == 422) {

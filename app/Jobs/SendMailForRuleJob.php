@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\File;
 use App\Models\Rule;
+use App\Models\Setting;
 
 class SendMailForRuleJob implements ShouldQueue
 {
@@ -65,6 +66,10 @@ class SendMailForRuleJob implements ShouldQueue
             }
         }
         fclose($handle);
-        Mail::to('your_receiver_email@gmail.com')->send(new \App\Mail\SendEmailCsvForRules($file));
+        $setting = Setting::where('user_id', $this->user_id)
+            ->first();
+        Mail::to($setting->admin_email)->send(new \App\Mail\SendEmailCsvForRules($file));
+
+        File::delete(public_path('files/' . $file));
     }
 }

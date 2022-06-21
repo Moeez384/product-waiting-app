@@ -24,7 +24,8 @@ class SendStatusConfirmationMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Status Confirmation Mail')
+        return $this->from('moeez.ahmed@unitedsol.net')
+            ->subject('Status Confirmation Mail')
             ->view('Emails.statusConfrimationMail');
     }
 }

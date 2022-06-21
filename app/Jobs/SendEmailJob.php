@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\Customer;
 use App\Mail\SendEmailCsv;
 use Illuminate\Support\Facades\Mail;
-use App\Models\User;
+use App\Models\Setting;
 
 class SendEmailJob implements ShouldQueue
 {
@@ -31,7 +31,10 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle()
     {
-        $customers = Customer::where('user_id', $this->user_id)->with('categories')->get();
+        $customers = Customer::where('user_id', $this->user_id)
+            ->with('categories')
+            ->get();
+
         $headers = array(
             'Content-Type' => 'application/vnd.ms-excel; charset=utf-8',
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
@@ -39,18 +42,23 @@ class SendEmailJob implements ShouldQueue
             'Expires' => '0',
             'Pragma' => 'public',
         );
+
         if (!File::exists(public_path() . "/files")) {
             File::makeDirectory(public_path() . "/files");
         }
+
         $file = time() . '.csv';
 
         $filename =  public_path('files/' . $file);
+
         $handle = fopen($filename, 'w');
+
         fputcsv($handle, [
             "Email",
             "Status",
             "Product Title",
         ]);
+
         foreach ($customers as $customer) {
             foreach ($customer->categories as $category) {
                 fputcsv($handle, [
@@ -60,8 +68,14 @@ class SendEmailJob implements ShouldQueue
                 ]);
             }
         }
+
         fclose($handle);
-        $user = User::find($this->user_id);
-        Mail::to('admin@gmail.com')->send(new \App\Mail\SendEmailCsv($file));
+
+        $setting = Setting::where('user_id', $this->user_id)
+            ->first();
+
+        Mail::to($setting->admin_email)->send(new \App\Mail\SendEmailCsv($file));
+
+        File::delete(public_path('files/' . $file));
     }
 }

@@ -142,16 +142,16 @@ class RuleController extends Controller
 
     private function checkCategoryForSave($data)
     {
-        $productOrCollection = '';
+        $product = '';
         for ($i = 0; $i < count($data['products']); $i++) {
             $category = Category::where('product_or_collection_id', $data['products'][$i])->first();
             if ($category) {
-                $productOrCollection = $category->title;
+                $product = $category->title;
                 break;
             }
         }
-        if ($productOrCollection) {
-            return $productOrCollection;
+        if ($product) {
+            return $product;
         } else {
             return false;
         }
@@ -159,7 +159,7 @@ class RuleController extends Controller
 
     private function checkCategoryForUpdate($data)
     {
-        $productOrCollection = '';
+        $product = '';
         for ($i = 0; $i < count($data['products']); $i++) {
 
             $category = Category::where('product_or_collection_id', $data['products'][$i])
@@ -168,12 +168,12 @@ class RuleController extends Controller
                 })->first();
 
             if ($category) {
-                $productOrCollection = $category->title;
+                $product = $category->title;
                 break;
             }
         }
-        if ($productOrCollection) {
-            return $productOrCollection;
+        if ($product) {
+            return $product;
         } else {
             return false;
         }
