@@ -20,6 +20,7 @@ class CreateMessagesTable extends Migration
             $table->text('email_already_exist_message')->nullable();
             $table->text('does_not_have_account_message')->nullable();
             $table->text('product_already_in_the_waiting_message')->nullable();
+            $table->text('product_in_the_waiting_list_button_message')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

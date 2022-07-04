@@ -11,8 +11,7 @@
                         <i class="icon-question append-spacing"></i>
                         <span>User Guide</span>
                     </a>
-                    <a class="link" target="_blank" style="padding-left: 1rem;"
-                        href="https://support.extendons.com/">
+                    <a class="link" target="_blank" style="padding-left: 1rem;" href="https://support.extendons.com/">
                         <span>Get Support</span>
                     </a>
                 </div>
@@ -57,7 +56,8 @@
                 <div class="card has-sections" style="padding:0px;">
                     <ul class="tabs">
                         <li class="active" id="generalSettingsLi">
-                            <a href="#" id="generalSettings"><i class="icon-edit append-spacing"></i>General Settings</a>
+                            <a href="#" id="generalSettings"><i class="icon-edit append-spacing"></i>General
+                                Settings</a>
                         </li>
                         <li id="messagesLi">
                             <a href="#" id="messages"><i class="icon-pages append-spacing"></i>Messages</a>
@@ -222,6 +222,18 @@
                                             ]) }}
 
                                             {{ Form::text('product_already_in_the_waiting_message', $messages['product_already_in_the_waiting_message'], ['placeholder' => 'Enter Product already in the waiting list Message']) }}
+                                            <label class="error_success_message"></label>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="column twelve">
+                                            {{ Form::label('Product in the waiting list button message', 'Product in the waiting list button message', [
+                                                'style' => 'font-size: medium;                               padding-bottom: 7px;',
+                                            ]) }}
+
+                                            {{ Form::text('product_in_the_waiting_list_button_message', $messages['product_in_the_waiting_list_button_message'], ['placeholder' => 'Enter Product In The Waiting list Button Message']) }}
                                             <label class="error_success_message"></label>
                                         </div>
                                     </div>

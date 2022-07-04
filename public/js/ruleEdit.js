@@ -18,8 +18,8 @@ $(document).ready(() => {
         }
     });
 
-    /* Retrive all product from the shopify
-       product api using select2 ajax call.
+    /* Retrive all products from the shopify
+       products api using select2 ajax call.
     */
     $('#product').select2({
         ajax: {
@@ -42,7 +42,7 @@ $(document).ready(() => {
     /*
         On save button click event call the
         updateRuleData function to save rule data
-        in the data base.
+        in the Database.
     */
     $(".btn-save").click(function(e) {
         e.preventDefault();

@@ -1,6 +1,6 @@
 $(document).ready(() => {
 
-    //Edit the status of the Customer
+    // Edit the status of the Customer
     $(document).on('click', '.editCustomerStatus', function() {
         const currentRow = $(this).closest("tr");
         var id = $(this).data('id');
@@ -41,7 +41,7 @@ $(document).ready(() => {
         });
     });
 
-    //Export Customer's Data in Csv Format
+    // Export Customer's Data in Csv Format
     $("#exportCsv").click(() => {
 
         $('.app-loader').show();
@@ -70,7 +70,8 @@ $(document).ready(() => {
     });
 
 
-    //Pagination
+    // Pagination
+
     $(document).on('click', '.pagination a', function(event) {
         event.preventDefault();
 
@@ -89,6 +90,11 @@ $(document).ready(() => {
         }
     });
 
+    /* This function is called when both
+       fields have data and the user wants
+       to apply pagination on the given
+       data.
+    */
     function searchAndProductPagination(search, productId, page) {
         $.ajax({
             type: 'Get',
@@ -104,7 +110,11 @@ $(document).ready(() => {
         });
     }
 
-
+    /*   This function is called when only
+         product field have data and the user
+         wants to apply pagination according to
+         that data.
+    */
     function productIdPagination(productId, page) {
         $.ajax({
             type: 'Get',
@@ -118,6 +128,10 @@ $(document).ready(() => {
             },
         });
     }
+
+    /*  Search Based on product or
+        any other field
+    */
 
     $("#search").keyup(function() {
         var search = $('#search').val();
@@ -181,8 +195,6 @@ $(document).ready(() => {
     }
 
     function searchByCustomer(search) {
-
-
         $.ajax({
             type: 'Get',
             url: "/customer-search",

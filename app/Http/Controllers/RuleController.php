@@ -16,6 +16,7 @@ use Shopify\Utils;
 use App\Jobs\SendMailForRuleJob;
 use App\Models\Customer as Cus;
 use App\Models\CustomerCategory;
+use App\Models\Message;
 
 class RuleController extends Controller
 {
@@ -31,9 +32,11 @@ class RuleController extends Controller
         if (count($ruleSettings) > 0 && $generalSettings) {
             return view("rules.index", compact(['ruleSettings']));
         } else if ($generalSettings) {
-            return redirect()->route('rules.create');
+            return redirect()
+                ->route('rules.create');
         } else {
-            return redirect()->route('general.settings');
+            return redirect()
+                ->route('general.settings');
         }
     }
 
@@ -59,6 +62,7 @@ class RuleController extends Controller
     public function getProducts(Request $request)
     {
         $searchTitle = $request->get('term');
+
         if ($searchTitle == '') {
             $searchTitle = 'a';
         }
@@ -68,6 +72,7 @@ class RuleController extends Controller
         ];
 
         $shop = Auth::user();
+
         $result = $shop->api()->rest('GET', '/admin/products.json', $fields);
 
         foreach ($result['body']['products'] as $product) {
@@ -78,7 +83,9 @@ class RuleController extends Controller
                 ];
             }
         }
-        return response()->json($dataArray);
+
+        return response()
+            ->json($dataArray);
     }
 
 
@@ -93,7 +100,8 @@ class RuleController extends Controller
         ]);
 
         if (carbon::parse($request->start_date) > Carbon::parse($request->end_date)) {
-            return response()->json('End Date must be greater than Start Date', 406);
+            return response()
+                ->json('End Date must be greater than Start Date', 406);
         }
 
         $rule = Rule::where('user_id', Auth::user()->id)
@@ -103,16 +111,20 @@ class RuleController extends Controller
         if (empty($rule)) {
             $check = $this->store($request);
             if ($check == 1) {
-                return response()->json('Rule Saved Successfully');
+                return response()
+                    ->json('Rule Saved Successfully');
             } else {
-                return response()->json("The Item " . $check . " already Exits", 406);
+                return response()
+                    ->json("The Item " . $check . " already Exits", 406);
             }
         } else {
             $check = $this->update($request, $rule->id);
             if ($check == 1) {
-                return response()->json('Rule Updated Successfully');
+                return response()
+                    ->json('Rule Updated Successfully');
             } else {
-                return response()->json("The Item " . $check . " already Exits in another Rule", 406);
+                return response()
+                    ->json("The Item " . $check . " already Exits in another Rule", 406);
             }
         }
     }
@@ -143,6 +155,7 @@ class RuleController extends Controller
     private function checkCategoryForSave($data)
     {
         $product = '';
+
         for ($i = 0; $i < count($data['products']); $i++) {
             $category = Category::where('product_or_collection_id', $data['products'][$i])->first();
             if ($category) {
@@ -150,6 +163,7 @@ class RuleController extends Controller
                 break;
             }
         }
+
         if ($product) {
             return $product;
         } else {
@@ -160,6 +174,7 @@ class RuleController extends Controller
     private function checkCategoryForUpdate($data)
     {
         $product = '';
+
         for ($i = 0; $i < count($data['products']); $i++) {
 
             $category = Category::where('product_or_collection_id', $data['products'][$i])
@@ -172,6 +187,7 @@ class RuleController extends Controller
                 break;
             }
         }
+
         if ($product) {
             return $product;
         } else {
@@ -182,6 +198,7 @@ class RuleController extends Controller
     private function update($data, $id)
     {
         $checkCategory = $this->checkCategoryForUpdate($data);
+
         if ($checkCategory) {
             return $checkCategory;
         } else {
@@ -214,6 +231,7 @@ class RuleController extends Controller
         for ($i = 0; $i < count($data['products']); $i++) {
 
             $shop = Auth::user();
+
             $result = $shop->api()->rest('GET', '/admin/products/' . $data['products'][$i] . '.json');
 
             $category = new Category();
@@ -237,9 +255,11 @@ class RuleController extends Controller
                 ->with('categories')
                 ->simplePaginate(5);
 
-            return view('rules.pagination_data', compact('ruleSettings'))->render();
+            return view('rules.pagination_data', compact('ruleSettings'))
+                ->render();
         } catch (\Exception $e) {
-            return response()->json("Something Went Wrong!", 406);
+            return response()
+                ->json("Something Went Wrong!", 406);
         }
     }
 
@@ -270,7 +290,8 @@ class RuleController extends Controller
             ->orderBy('id', 'desc')
             ->simplePaginate(5);
 
-        return view('rules.pagination_data', compact('ruleSettings'))->render();
+        return view('rules.pagination_data', compact('ruleSettings'))
+            ->render();
     }
 
     public function pagination(Request $request)
@@ -280,7 +301,8 @@ class RuleController extends Controller
             ->with('categories')
             ->simplePaginate(5);
 
-        return view('rules.pagination_data', compact('ruleSettings'))->render();
+        return view('rules.pagination_data', compact('ruleSettings'))
+            ->render();
     }
 
     public function edit(Rule $rule)
@@ -292,28 +314,50 @@ class RuleController extends Controller
 
     public function checkProductHandle(Request $request)
     {
-        $user = User::where('name', $request->domain_name)->first();
+        $user = User::where('name', $request->domain_name)
+            ->first();
 
-        if ($request->cid) {
-            $customer = Cus::where('cid', $request->cid)->first();
-            $product = Category::where('handle', $request->handle)->first();
-            if ($customer) {
-                $customerCategory = CustomerCategory::where('customer_id', $customer->id)
-                    ->where('category_id', $product->id)
+        $setting = Setting::where('user_id', $user->id)
+            ->first();
+
+        $messages = Message::where('user_id', $user->id)
+            ->first();
+
+        if ($setting->enable_app == 1) {
+
+            if ($request->cid) {
+                $customer = Cus::where('cid', $request->cid)
                     ->first();
 
-                if ($customerCategory) {
-                    $result['tocken'] = 2;
-                    $result['setting']
-                        = Setting::where('user_id', $user->id)->first();
-                    $result['customer'] = $customer;
-                    return response()->json($result);
+                $product = Category::where('handle', $request->handle)
+                    ->first();
+
+                if ($customer) {
+                    $customerCategory = CustomerCategory::where('customer_id', $customer->id)
+                        ->where('category_id', $product->id)
+                        ->first();
+
+                    if ($customerCategory) {
+                        $result['tocken'] = 2;
+                        $result['setting']
+                            = Setting::where('user_id', $user->id)
+                            ->first();
+                        $result['button_message'] = $messages->product_in_the_waiting_list_button_message;
+                        $result['customer'] = $customer;
+
+                        return response()
+                            ->json($result);
+                    }
+                } else {
+                    return
+                        $this->checkForProductHandle($request, $user->id);
                 }
             } else {
-                return $this->checkForProductHandle($request, $user->id);
+                return
+                    $this->checkForProductHandle($request, $user->id);
             }
         } else {
-            return $this->checkForProductHandle($request, $user->id);
+            return;
         }
     }
 
@@ -333,7 +377,6 @@ class RuleController extends Controller
             ->get();
 
         if ($rules->count() > 0) {
-
             foreach ($rules as $rule) {
                 $product = Category::where('rule_id', $rule->id)
                     ->where('handle', $request->handle)
@@ -343,26 +386,34 @@ class RuleController extends Controller
                     $result['token'] = 1;
                     $result['product'] = $product;
                     $result['setting'] =
-                        Setting::where('user_id', $id)->first();
-                    return response()->json($result);
+                        Setting::where('user_id', $id)
+                        ->first();
+
+                    return response()
+                        ->json($result);
                 }
             }
         } else if ($rules->count() == 0) {
-            $rules = Rule::where('user_id', $id)->get();
+            // $rules = Rule::where('user_id', $id)
+            //     ->get();
 
-            foreach ($rules as $rule) {
-                $product = Category::where('rule_id', $rule->id)
-                    ->where('handle', $request->handle)
-                    ->first();
+            return;
 
-                if ($product) {
-                    $result['token'] = 0;
-                    $result['product'] = $product;
-                    $result['setting'] =
-                        Setting::where('user_id', $id)->first();
-                    return response()->json($result);
-                }
-            }
+            // foreach ($rules as $rule) {
+            //     $product = Category::where('rule_id', $rule->id)
+            //         ->where('handle', $request->handle)
+            //         ->first();
+
+            //     if ($product) {
+            //         $result['token'] = 0;
+            //         $result['product'] = $product;
+            //         $result['setting'] =
+            //             Setting::where('user_id', $id)->first();
+
+            //         return response()
+            //             ->json($result);
+            //     }
+            // }
         }
     }
 
@@ -370,6 +421,7 @@ class RuleController extends Controller
     {
         dispatch(new SendMailForRuleJob(Auth::user()->id));
 
-        return response()->json('Rules Csv has been sent to your mail.');
+        return response()
+            ->json('Rules Csv has been sent to your mail.');
     }
 }

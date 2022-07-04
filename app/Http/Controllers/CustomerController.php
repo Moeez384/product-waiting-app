@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Js;
 use App\Jobs\ChangeStatusJob;
+use App\Models\Message;
+use App\Models\Setting;
 
 class CustomerController extends Controller
 {
@@ -27,7 +29,8 @@ class CustomerController extends Controller
                 ->with('categories')
                 ->simplePaginate(5);
 
-            return view('customers.pagination', compact('customers'))->render();
+            return view('customers.pagination', compact('customers'))
+                ->render();
         } else {
             $customers = Customer::where('user_id', Auth::user()->id)
                 ->orderBy('id', 'DESC')
@@ -46,6 +49,7 @@ class CustomerController extends Controller
     {
         try {
             $customer = Customer::find($id);
+
             $statusId = $customer->status;
 
             $status = '';
@@ -66,7 +70,8 @@ class CustomerController extends Controller
             $result['message'] = "Customer Status Updated Successfully";
             $result['status'] = $status;
 
-            return response()->json($result);
+            return response()
+                ->json($result);
         } catch (\Exception $e) {
 
             return response()->json([
@@ -78,7 +83,6 @@ class CustomerController extends Controller
     public function search(Request $request)
     {
         if ($request->search && $request->productId) {
-
             $customers = Customer::where(function ($query) use ($request) {
                 return $query->where('email', 'like', '%' . $request->search . '%')
                     ->where('user_id', Auth::user()->id)
@@ -88,9 +92,9 @@ class CustomerController extends Controller
                     return $query->where('product_or_collection_id', $request->productId);
                 })->simplePaginate(5);
 
-            return view('customers.pagination', compact('customers'))->render();
+            return view('customers.pagination', compact('customers'))
+                ->render();
         } elseif ($request->search) {
-
             $customers = Customer::where('user_id', Auth::user()->id)
                 ->Where('email', 'like', '%' . $request->search . '%')
                 ->orWhere('status', 'like', '%' . $request->search . '%')
@@ -98,7 +102,8 @@ class CustomerController extends Controller
                 ->with('categories')
                 ->simplePaginate(5);
 
-            return view('customers.pagination', compact('customers'))->render();
+            return view('customers.pagination', compact('customers'))
+                ->render();
         } elseif ($request->productId) {
             $customers = Customer::where('user_id', Auth::user()->id)
                 ->orderBY('id', 'DESC')
@@ -107,14 +112,16 @@ class CustomerController extends Controller
                 })
                 ->simplePaginate(5);
 
-            return view('customers.pagination', compact('customers'))->render();
+            return view('customers.pagination', compact('customers'))
+                ->render();
         } else {
             $customers = Customer::where('user_id', Auth::user()->id)
                 ->orderBy('id', 'DESC')
                 ->with('categories')
                 ->simplePaginate(5);
 
-            return view('customers.pagination', compact('customers'))->render();
+            return view('customers.pagination', compact('customers'))
+                ->render();
         }
     }
 
@@ -125,11 +132,18 @@ class CustomerController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('name', $request->domain_name)->first();
+        $user = User::where('name', $request->domain_name)
+            ->first();
 
-        $customer = Customer::where('email', $request->email)->first();
+        $messages = Message::where('user_id', $user->id)
+            ->first();
+
+        $customer = Customer::where('email', $request->email)
+            ->first();
+
         if ($customer) {
-            return response()->json('This email is already registered. Please login to add product to the waiting list!', 404);
+            return response()
+                ->json($messages->email_already_exist_message, 404);
         } else {
             $result = $user->api()->rest('POST', '/admin/customers.json', ['customer' => [
                 'first_name' => "",
@@ -144,7 +158,8 @@ class CustomerController extends Controller
             ]]);
 
             if ($result['status'] == 422) {
-                return response()->json('This email is already registered. Please login to add product to the waiting list!', 444);
+                return response()
+                    ->json($messages->email_already_exist_message, 444);
             } else {
                 $customer = Customer::create([
                     'email' => $request->email,
@@ -152,7 +167,10 @@ class CustomerController extends Controller
                     'cid' => $result['body']['customer']->id,
                     'user_id' => $user->id,
                 ]);
-                $category = Category::where('handle', $request->handle)->first();
+
+                $category = Category::where('handle', $request->handle)
+                    ->first();
+
                 CustomerCategory::create([
                     'customer_id' => $customer->id,
                     'category_id' => $category->id,
@@ -166,23 +184,40 @@ class CustomerController extends Controller
 
         dispatch(new ProductWaitingListJob($details));
 
-        return response()->json("Product added to the waiting list");
+        $setting = Setting::where('user_id', $user->id)
+            ->first();
+
+        $data['success_message'] = $messages->success_message;
+        $data['button_message'] = $messages->product_in_the_waiting_list_button_message;
+        $data['setting'] = $setting;
+
+        return response()
+            ->json($data);
     }
 
     public function login(Request $request)
     {
-        $user = User::where('name', $request->domain_name)->first();
+        $user = User::where('name', $request->domain_name)
+            ->first();
+
+        $messages = Message::where('user_id', $user->id)
+            ->first();
+
         $result = $user->api()->rest('GET', '/admin/api/2022-04/customers/' . $request->cid . '.json');
 
         if (empty($result)) {
-            return response()->json('Does not have an account', 404);
+            return response()
+                ->json($messages->does_not_have_account_message, 404);
         }
 
         $email = $result['body']['customer']->email;
+
         $customer = Customer::where('user_id', $user->id)
             ->where('email', $email)
             ->first();
-        $category = Category::where('handle', $request->handle)->first();
+
+        $category = Category::where('handle', $request->handle)
+            ->first();
 
         if (empty($customer)) {
             $customer = Customer::create([
@@ -204,17 +239,23 @@ class CustomerController extends Controller
 
             dispatch(new ProductWaitingListJob($details));
 
-            return response()->json('Product added to the waiting list');
-        } else {
+            $setting = Setting::where('user_id', $user->id)
+                ->first();
 
+            $data['success_message'] = $messages->success_message;
+            $data['setting'] = $setting;
+
+            return response()
+                ->json($data);
+        } else {
             $customerCategory = CustomerCategory::where('customer_id', $customer->id)
                 ->where('category_id', $category->id)
                 ->first();
 
             if ($customerCategory) {
-                return response()->json('You have already added the product in the waiting list', 404);
+                return response()
+                    ->json($messages->product_already_in_the_waiting_message, 404);
             } else {
-
                 CustomerCategory::create([
                     'customer_id' => $customer->id,
                     'category_id' => $category->id,
@@ -224,8 +265,17 @@ class CustomerController extends Controller
                     'product' => $category->title,
                     'email' => $customer->email,
                 ];
+
                 dispatch(new ProductWaitingListJob($details));
-                return response()->json('Product added to the waiting list');
+
+                $setting = Setting::where('user_id', $user->id)
+                    ->first();
+
+                $data['message'] = $messages->success_message;
+                $data['setting'] = $setting;
+
+                return response()
+                    ->json($data);
             }
         }
     }
@@ -234,6 +284,7 @@ class CustomerController extends Controller
     {
         dispatch(new SendEmailJob(Auth::user()->id));
 
-        return response()->json('Customer Csv has been sent to your mail.');
+        return response()
+            ->json('Customer Csv has been sent to your mail.');
     }
 }

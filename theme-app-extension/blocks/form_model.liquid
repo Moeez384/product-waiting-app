@@ -1,4 +1,3 @@
-
 <script crossorigin="anonymous" defer="defer" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
 <script crossorigin="anonymous" defer="defer" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
@@ -7,258 +6,428 @@
 <script src="{{ 'app.js' | asset_url }}" defer></script>
 
 <style>
-/* defaults */
-/* =============================================== */
-*,
-*::after,
-*::before {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+
+input,
+select,
+textarea,
+button {
+    font-family: inherit;
 }
 
-html {
-  font-size: 62.5%;
-}
-
-
-a,
-a:link {
-  font-family: inherit;
-  text-decoration: none;
-}
-
-/* modal */
-/* =============================================== */
-.modal-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 50;
-
-  display: none;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  height: 100%;
-
-  background: hsla(0, 0%, 40%, .6);
-}
-
-/* using :target */
-.modal-container:target {
-  display: flex;
-}
-
-.modal {
-  width: 60rem;
-  padding: 4rem 2rem;
-  border-radius: .8rem;
-
-  color: var(--light);
-  background: var(--background);
-  box-shadow: .4rem .4rem 2.4rem .2rem hsla(236, 50%, 50%, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.modal__details {
-  text-align: center;
-
-  margin-bottom: 4rem;
-  padding-bottom: 4rem;
-  border-bottom: 1px solid hsla(0, 0%, 100%, .4);
-}
-
-.modal__title {
-  font-size: 3.2rem;
-}
-
-.modal__description {
-  margin-top: 2rem;
-
-  font-size: 1.6rem;
-  font-style: italic;
-}
-
-.modal__text {
-  padding: 0 4rem;
-  margin-bottom: 4rem;
-
-  font-size: 1.6rem;
-  line-height: 2;
-}
-
-.modal__text::before {
-  content: '';
-
-  position: absolute;
-  top: 0%;
-  left: 100%;
-  transform: translate(-50%, -50%);
-
-  width: 18rem;
-  height: 18rem;
-  border: 1px solid hsla(0, 0%, 100%, .2);
-  border-radius: 100rem;
-
-  pointer-events: none;
-}
-
-.modal__btn {
-  padding: 1rem 1.6rem;
-  border: 1px solid hsla(0, 0%, 100%, .4);
-  border-radius: 100rem;
-
-  color: inherit;
-  background: transparent;
-  font-size: 1.4rem;
-  font-family: inherit;
-  letter-spacing: .2rem;
-
-  transition: .2s;
-  cursor: pointer;
-}
-
-.modal__btn:hover,
-.modal__btn:focus {
-  border-color: hsla(0, 0%, 100%, .6);
-  transform: translateY(-.2rem);
-}
-
-/* links */
-/* =============================================== */
-.link-1 {
-  font-size: 1.8rem;
-
-  color: var(--light);
-  box-shadow: .4rem .4rem 2.4rem .2rem hsla(236, 50%, 50%, 0.3);
-  width:100%;
-  padding: 1.4rem 3.2rem;
-
-  transition: .2s;
-}
-
-.link-1:hover,
-.link-1:focus {
-  transform: translateY(-.2rem);
-  box-shadow: 0 0 4.4rem .2rem hsla(236, 50%, 50%, 0.4);
-}
-
-.link-2 {
-  width: 4rem;
-  height: 4rem;
-  border: 1px solid hsla(0, 0%, 100%, .4);
-  border-radius: 100rem;
-
-  color: inherit;
-  font-size: 2.2rem;
-
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  transition: .2s;
-}
-
-.link-2::before {
-  content: '×';
-
-  transform: translateY(-.1rem);
-}
-
-.link-2:hover,
-.link-2:focus {
-  border-color: hsla(0, 0%, 100%, .6);
-  transform: translateY(-.2rem);
-}
-
-/* Second Version Link */
-/* =============================================== */
-.second-version-link,
-.second-version-link:link {
-  color: hsl(236, 50%, 50%);
-  padding: .8rem 1.6rem .8rem .2rem;
-  border-bottom: 2px solid hsl(236, 50%, 50%);
-
-  font-size: 1.4rem;
-  font-weight: bold;
-
-  position: absolute;
-  top: 4rem;
-  right: 4rem;
-}
-
-.second-version-link::after {
-  content: '\2197';
-
-  position: absolute;
-  top: 0;
-  right: 0;
-
-  font-size: .9em;
-}
-
-.abs-site-link {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  color: hsla(0, 0%, 0%, .6);
-  font-size: 1.6rem;
-}
-
-.signup{
-	position: relative;
-	width:100%;
-	height: 100%;
-}
-.registrationLabel{
-	color: #fff;
-	font-size: 2.3em;
-	justify-content: center;
-	display: flex;
-	margin: 60px;
-	font-weight: bold;
-	cursor: pointer;
-	transition: .5s ease-in-out;
-}
-.registrationInputs{
-
-	width: 60%;
-	background: #e0dede;
-	justify-content: center;
-	display: flex;
-	margin: 20px auto;
-	padding: 10px;
-	border: none;
-	outline: none;
-	border-radius: 5px;
+body {
+    font-family: aileron, sans-serif;
 }
 
 
-button::hover{
-    background-color:white;
+/*
+POPUP 1 */
+
+.congo-logo img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 20px;
+    box-sizing: border-box;
 }
+
+.congo-logo {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.text {
+    text-align: center;
+}
+
+.text .congo-text h1 {
+    font-weight: 700;
+    color: #069CE2;
+    font-size: 26px;
+}
+
+.text .waiting-list p {
+    font-size: 20px;
+    font-weight: 400;
+    color: #505050;
+}
+
+.text .check-inbox p {
+    font-size: 20px;
+    font-weight: 400;
+    color: #505050;
+}
+
+
+/* POP UP 2 */
+
+.failure-logo img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 8px;
+    box-sizing: border-box;
+}
+
+.failure-logo {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.text {
+    text-align: center;
+}
+
+.text .failure-text p {
+    font-weight: 700;
+    color: #069CE2;
+    font-size: 26px;
+}
+
+.text .try-again p {
+    font-size: 20px;
+    font-weight: 400;
+    color: #505050;
+}
+
+
+/* POPUP 3 */
+
+.login-register {
+    display: flex;
+    align-items: center;
+}
+
+.login-register .login {
+    background-color: #E0EDF3;
+    width: 50%;
+    line-height: 40px;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 2px;
+    border: 1px solid #E0EDF3;
+}
+
+#eo-sh-login-heading,
+#eo-sh-register-heading{
+    color:black;
+}
+
+.login-register .login span img {
+    vertical-align: middle;
+    padding-right: 8px;
+    box-sizing: border-box;
+}
+
+.login-register .login p {
+    display: inline-block;
+    font-weight: 700;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+
+.login-register .register {
+    background-color: #069CE2;
+    width: 50%;
+    line-height: 40px;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 2px;
+    border: 1px solid #069CE2;
+}
+
+.login-register .register span img {
+    vertical-align: middle;
+    padding-right: 8px;
+    box-sizing: border-box;
+}
+
+.login-register .register p {
+    display: inline-block;
+    font-weight: 700;
+    color: #505050;
+    font-size: 20px;
+}
+
+.email-address input[type=email]:focus {
+    outline: none;
+}
+
+.email-address input {
+    border: none;
+    padding: 0px;
+    font-size: 20px;
+    font-weight: 400;
+    appearance: none;
+    padding-left: 15px;
+    box-sizing: border-box;
+}
+
+.email-address input {
+    border-left: unset;
+    flex-basis: 100%;
+    border: 1px solid #B6B6B6
+}
+
+.email-address {
+    margin: 4px 0px;
+    height: 65px;
+    box-sizing: border-box;
+    display: flex;
+    max-width: 96%;
+    margin: 25px 25px 28px 25px;
+    border-radius: 3px;
+}
+
+.password input[type=email]:focus {
+    outline: none;
+}
+
+.password input {
+    border: none;
+    padding: 0px;
+    font-size: 20px;
+    font-weight: 400;
+    appearance: none;
+    padding-left: 15px;
+    box-sizing: border-box;
+}
+
+.password input {
+    border-left: unset;
+    flex-basis: 100%;
+    border: 1px solid #B6B6B6;
+}
+
+.password {
+    margin: 4px 0px;
+    height: 65px;
+    box-sizing: border-box;
+    display: flex;
+    max-width: 96%;
+    margin: 25px 25px 28px 25px;
+    border-radius: 3px;
+}
+
+.register-join {
+    max-width: 96%;
+    margin: 25px 25px 28px 25px;
+    border-radius: 5px;
+}
+
+.register-join .register {
+    /* Green */
+    border-radius: 3px;
+    border: 1px solid #069CE2;
+    color: #FFFFFF;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    margin: 4px 0px;
+    cursor: pointer;
+    padding: 18px 40px;
+    font-size: 20px;
+    font-weight: 600;
+    height: 65px;
+    width:100%;
+    box-sizing: border-box;
+}
+
+.register-join .bg {
+    background-color: #069CE2;
+}
+
+.register-join .eo-sh-close-modal-button{
+    border-radius: 3px;
+    border: 1px solid #069CE2;
+    color: #FFFFFF;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    margin: 4px 0px;
+    cursor: pointer;
+    padding: 18px 40px;
+    font-size: 20px;
+    font-weight: 600;
+    height: 65px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.register-join #bg{
+    background-color: #069CE2;
+}
+
+.register-join .eo-sh-close-button{
+    border-radius: 3px;
+    border: 1px solid #069CE2;
+    color: #FFFFFF;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    margin: 4px 0px;
+    cursor: pointer;
+    padding: 18px 40px;
+    font-size: 20px;
+    font-weight: 600;
+    height: 65px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.wrapper {
+    border-collapse: separate;
+    border-radius: 6px;
+}
+
+
+/* popup 4 */
+
+.forgot-password p {
+    color: #505050;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.forgot-password {
+    text-align: center;
+}
+
+
+/* overlay */
+
+.wrapper .overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.failure.wrapper .overlay .overlay-text {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 20%;
+    background-color: white;
+    max-width: 45%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    box-sizing: border-box;
+    border-radius: 7px;
+}
+
+.success.wrapper .overlay .overlay-text {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 20%;
+    background-color: white;
+    max-width: 45%;
+    padding-top: 50px;
+    padding-bottom: 65px;
+    box-sizing: border-box;
+    border-radius: 7px;
+}
+
+.form.wrapper .overlay .overlay-text {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 20%;
+    background-color: white;
+    max-width: 45%;
+    border-radius: 7px;
+    padding-top: 0px;
+    padding-bottom: 6px;
+    box-sizing: border-box;
+}
+
+
+/* RESPONSIVE */
+
+@media screen and (min-width:300px) and (max-width:899px) {
+    .failure.wrapper .overlay .overlay-text {
+        max-width: 85%;
+    }
+    .success.wrapper .overlay .overlay-text {
+        max-width: 85%;
+    }
+    .form.wrapper .overlay .overlay-text {
+        max-width: 85%;
+    }
+}
+
+@media screen and (min-width:300px) and (max-width:600px) {
+    .text .congo-text h1 {
+        font-size: 24px;
+    }
+    .text .waiting-list p {
+        font-size: 18px;
+        padding-left: 25px;
+        padding-right: 15px;
+        box-sizing: border-box;
+    }
+    .text .check-inbox p {
+        font-size: 18px;
+        padding-left: 15px;
+        padding-right: 15px;
+        box-sizing: border-box;
+    }
+    .failure.wrapper.wrapper .overlay-text {
+        top: 15%;
+        /* min-height: 40%; */
+    }
+    .success.wrapper .overlay .overlay-text {
+        /* min-height: 50%; */
+        top: 15%;
+    }
+    .text .failure-text p {
+        font-size: 20px;
+        padding-left: 15px;
+        padding-right: 15px;
+        box-sizing: border-box;
+    }
+    .text .try-again p {
+        font-size: 18px;
+        padding-left: 15px;
+        padding-right: 15px;
+        box-sizing: border-box;
+    }
+    .form.wrapper .overlay .overlay-text {
+        top: 12%;
+    }
+    .form.wrapper .overlay .overlay-text {
+        max-width: 95%;
+    }
+    .register-join .register {
+        font-size: 16px;
+        padding: 18px 12px;
+    }
+
+    .register .eo-sh-close-modal-button{
+        font-size: 16px;
+        padding: 18px 12px;
+    }
+}
+
+a {
+    text-decoration: none;
+}
+
+
+
+
+
+//old css
 
 ::placeholder {
   color: black;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -292,29 +461,6 @@ button::hover{
     border-radius: 0.8rem;
 }
 
-.eo-sh-close-button {
-    width: 4rem;
-    height: 4rem;
-    border: 1px solid hsla(0, 0%, 100%, .4);
-    border-radius: 100rem;
-    color: inherit;
-    font-size: 2.2rem;
-    position: absolute;
-    top: 0rem;
-    right: 0rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: .2s;
-}
-
-
-.eo-sh-close-button:hover,
-.eo-sh-close-button:focus {
-  border-color: hsla(0, 0%, 100%, .6);
-  transform: translateY(-.2rem);
-}
-
 
 .show-modal {
     z-index:111;
@@ -324,236 +470,120 @@ button::hover{
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
 
-.eo-sh-heading{
-    margin-top:-35px;
-    float:left;
-    font-size: 2.3em;
-    justify-content: center;
-    pointer;transition: .5s ease-in-out;
-}
-
-hr{
-    width:100%;
-    margin-top:0px;
-}
-
-.eo-sh-form label{
-    margin-bottom:2px;
-}
-
-.eo-sh-form input{
-    width:100%;
-	justify-content: center;
-	display: flex;
-	margin: 0px auto;
-	padding: 10px;
-}
 
 
-#eo-sh-login-form-button,
-#eo-sh-register-form-button{
-    width: auto;
-    float:right;
-    height: auto;
-    padding:15px;
-    display: block;
-    color: #fff;
-    background: #573b8a;
-    font-weight: bold;
-    margin-top: 15px;
-    outline: none;
-    border: none;
-    border-radius: 5px;
-}
-
-#eo-sh-register-button,
-#eo-sh-login-button{
-    width: auto;
-    float:right;
-    height: auto;
-    padding:15px;
-    display: block;
-    color: #fff;
-    background: #573b8a;
-    font-weight: bold;
-    margin-top: 15px;
-    outline: none;
-    border: none;
-    border-radius: 5px;
-    margin-right:4px;
-}
-
-#eo-sh-login-email-error ul li,
-#eo-sh-login-password-error ul li,
-#eo-sh-register-email-error ul li,
-#eo-sh-register-password-error ul li{
-    color:#D8000C;
-    font-size:18px;
+#eo-sh-register-password-error,
+#eo-sh-register-email-error{
+    color:#f00;
+    margin-left:25px;
     display:none;
 }
 
-#eo-sh-register-div{
+.eo-sh-message-button{
     display:none;
+    margin-top:25px;
+    display:none;
+    font-size:1.8rem;
 }
+
 </style>
 
+<button class="eo-sh-waiting-list-button" >Waiting list Button</button>
 
-<a href="#modal-opened" class="link-1" style="display:none;">Open Modal</a>
+<button class="eo-sh-message-button" >Messages</button>
 
-<button class="eo-sh-waiting-list-button" >Contact Us!</button>
+<div class="eo-sh-modals modal">
+    <div class="modal-content">
+        <div class="form wrapper">
+            <div class="overlay">
+                <div class="overlay-text">
+                    <div class="login-register">
+                        <div class="register">
+                            <a href="#">
+                                <span><img src="{{ 'Register_Icon.png' | asset_url }}" width="35";
+                                height="25"; alt="" /></span>
+                                <p id="eo-sh-register-heading">Register</p>
+                            </a>
+                        </div>
 
-<div class="eo-sh-modals">
-    <div class="eo-sh-modal-content" id="eo-sh-login-div">
-     <div style="display:flex">
-      <h1 class="eo-sh-heading">Login</h1>
-      <span class="eo-sh-close-button">&times;</span>
-     </div>
-    <hr>
-        <div style="margin-top:-30px;">
-			<form method="post" class="eo-sh-form" action="/account/login" accept-charset="UTF-8" id="customer_login" novalidate autocomplete="off">
-             <div>
-                <input type="hidden" name="form_type" value="recover_customer_password">
-                <input type="hidden" name="utf8" value="✓">
-             	<label aria-hidden="true">Email</label>
-				<input type="email" name="customer[email]" id="eo-sh-login-email CustomerEmail" autocomplete="email" autocorrect="off" autocapitalize="off">
-             	<label aria-hidden="true">Password</label>
-                <input type="password" name="customer[password]" id="eo-sh-login-password CustomerPassword" autocomplete="current-password">
-             </div>
-				<button type="submit"  id="eo-sh-login-form-button">Login</button>
-                 <input type="hidden" name="checkout_url" id="checkout_url" value="">
+                        <div class="login">
+                            <a href="#">
+                                <span> <img src="{{ 'Login_icon.png' | asset_url }}" width="35";
+                                height="25"; alt="" /></span>
+                                <p id="eo-sh-login-heading">Login</p>
+                            </a>
+                        </div>
 
-            </form>
-            <button type="submit" id="eo-sh-register-button">Register</button>
-        </div>
-    </div>
+                    </div>
 
+                    <div class="eo-sh-register-div">
+                        <form class="eo-sh-form" accept-charset="UTF-8" novalidate autocomplete="off">
+                            <div class="email-address">
+                                <input type="email" name="email" id="eo-sh-register-email" placeholder="Enter Email Address" />
+                            </div>
+                            <span id="eo-sh-register-email-error" class="wl_validation_error">Please check that your email is valid</span>
 
+                            <div class="password">
+                                <input type="password" name="password" id="eo-sh-register-password" placeholder="Password" />
+                            </div>
+                            <span id="eo-sh-register-password-error" class="wl_validation_error">Please make sure your password is over 6 characters long</span>
 
-    <div class="eo-sh-modal-content" id="eo-sh-register-div" >
-     <div style="display:flex">
-      <h1 class="eo-sh-heading">Register</h1>
-      <span class="eo-sh-close-button" id="eo-sh-close-button">&times;</span>
-     </div>
-    <hr>
-        <div style="margin-top:-30px;">
-			<form class="eo-sh-form" accept-charset="UTF-8" novalidate autocomplete="off">
-             <div>
-             	<label aria-hidden="true">Email</label>
-				<input type="email" name="email" id="eo-sh-register-email">
-                <label id="eo-sh-register-email-error">
-                    <ul style="margin-left:12px;">
-                        <li>
-                            Email is required
-                        </li>
-                    </ul>
-                </label>
-             	<label aria-hidden="true">Password</label>
-                <input type="password" name="password" id="eo-sh-register-password">
-                <label id="eo-sh-register-password-error">
-                    <ul style="margin-left:12px;">
-                        <li>
-                            Password is required
-                        </li>
-                    </ul>
-                </label>
-             </div>
-				<button type="submit"  id="eo-sh-register-form-button">Register</button>
-            </form>
-            <button type="submit" id="eo-sh-login-button">Login</button>
-        </div>
-    </div>
-</div>
+                            <div class="register-join">
+                                <a href="" type="submit" id="eo-sh-register-form-button" class="register bg"><i id="eo-sh-spiner" class="fa"></i>Register & Join Waiting List</a>
+                                <a id="bg" class="eo-sh-close-modal-button">Close</a>
+                            </div>
+                        </form>
+                    </div>
 
+                    <div class="eo-sh-login-div" style="display:none;">
+                        <form method="post" class="eo-sh-form" action="/account/login" accept-charset="UTF-8" id="customer_login" novalidate autocomplete="off">
 
+                            <input type="hidden" name="form_type" value="recover_customer_password">
+                            <input type="hidden" name="utf8" value="✓">
 
-<div class="modal-container" id="modal-opened" >
-    <div class="modal">
-        <div id="loginForm">
-			<form method="post" action="/account/login" accept-charset="UTF-8" novalidate autocomplete="off">
-				<label for="chk" aria-hidden="true" style="margin-top:10px; color: #fff; font-size: 2.3em;justify-content: center; display: flex;margin: 60px; font-weight: bold; cursor: pointer;transition: .5s ease-in-out;">Login</label>
-                <div style="margin-top:-38px;">
-                <input type="hidden" name="form_type" value="recover_customer_password">
-                <input type="hidden" name="utf8" value="✓">
-				<input type="email" name="customer[email]" id="CustomerEmail" class="registrationInputs" id="CustomerEmail" autocomplete="email" autocorrect="off" autocapitalize="off" placeholder="Email">
-                <input type="password" value="" name="customer[password]" id="CustomerPassword" autocomplete="current-password" class="registrationInputs" placeholder="Password">
-            </div>
+                            <div class="email-address">
+                                <input type="email" required name="customer[email]" id="phone eo-sh-login-email CustomerEmail" autocomplete="email" autocorrect="off" autocapitalize="off" placeholder="Enter Email Address" />
+                            </div>
 
-				<button type="submit" id="customerLogin" style="width: 60%; height: 40px; margin: -15px auto; justify-content: center; display: block; color: #fff; background: #573b8a; font-size: 1em; font-weight: bold; margin-top: 20px;outline: none; border: none; border-radius: 5px; transition: .2s ease-in; cursor: pointer;">Login</button>
-            </form>
-
-                <button id="signup" style="margin-top:0px; width: 60%;height: 40px; margin: 10px auto; justify-content: center; display: block; color: #fff; background: #573b8a; font-size: 1em; font-weight: bold;margin-top: 20px; outline: none; border: none; border-radius: 5px; transition: .2s ease-in; cursor: pointer;">Signup</button>
-
-        </div>
-
-        <div class="signup" style="display:none;" id="signUpForm">
-			<form id="signupforms"  novalidate  autocomplete="off">
-				<label for="chk" aria-hidden="true" style="margin-top:10px; color: #fff; font-size: 2.3em;justify-content: center; display: flex;margin: 60px; font-weight: bold; cursor: pointer;transition: .5s ease-in-out;">Signup</label>
-
-                <label class="error_title fieldErrors default-hidden" id="errors"  style="display:none;">
-                    <ul style="margin-left:120px;">
-                        <li style="color:#D8000C; font-size:14px; margin-bottom:60px;margin-top:-60px;">
-
-                        </li>
-                    </ul>
-                </label>
-
-                <label class=" fieldErrors default-hidden" id="successMessage"  style="display:none;">
-                    <ul style="margin-left:120px;">
-                        <li style="color:#008000; font-size:14px; margin-bottom:60px;margin-top:-60px;">
-
-                        </li>
-                    </ul>
-                </label>
-
-
-                <div style="margin-top:-38px;">
-                    <input type="text" name="firstName" id="signUpFirstName" placeholder="First Name" class="registrationInputs" style="height::44px;">
-                    <label class="error_title fieldErrors default-hidden" id="FirstNameError" style="display:none;">
-                        <ul style="margin-top:-15px;margin-bottom:-15px;margin-left:120px;">
-                            <li style="color:#D8000C; font-size:14px; padding:0px;">
-                            First Name field is required
-                            </li>
-                        </ul>
-                    </label>
-                    <input type="text" name="lastName" id="signUpLastName" placeholder="Last Name" class="registrationInputs" style="height::44px;">
-                    <label class="error_title fieldErrors default-hidden" id="lastNameError" style="display:none;">
-                        <ul style="margin-top:-15px;margin-bottom:-15px;margin-left:120px;">
-                            <li style="color:#D8000C; font-size:14px; padding:0px;">
-                            Last Name field is required
-                            </li>
-                        </ul>
-                    </label>
-					<input type="email" name="email" id="signUpEmail" placeholder="Email" class="registrationInputs" style="height::44px;">
-                      <label class="error_title fieldErrors default-hidden" id="emailError" style="display:none;">
-                        <ul style="margin-top:-15px;margin-bottom:-15px;margin-left:120px;">
-                            <li style="color:#D8000C; font-size:14px; padding:0px;">
-                            Email is required
-                            </li>
-                        </ul>
-                    </label>
-					<input type="password" name="password" id="signUpPassword" placeholder="Password" class="registrationInputs" style="height::44px;">
-                    <label class="error_title fieldErrors default-hidden" id="passwordError" style="display:none;" >
-                        <ul style="margin-top:-15px;margin-bottom:-15px;margin-left:120px;">
-                            <li style="color:#D8000C; font-size:14px; padding:0px;">
-                            password is required
-                            </li>
-                        </ul>
-                    </label>
-
+                            <div class="password">
+                                <input type="password" required name="customer[password]" id="phone eo-sh-login-password CustomerPassword" autocomplete="current-password" name="phone" placeholder="Password" />
+                            </div>
+                            <div class="forgot-password">
+                                <a href="https://product-waiting-app.myshopify.com/account/login#recover">
+                                    <p>Forgot Password ?</p>
+                                </a>
+                            </div>
+                            <div class="register-join">
+                                <button type="submit"  id="eo-sh-login-form-button" style="margin-top:-23px" class="register bg">Sign In</button>
+                                <input type="hidden" name="checkout_url" id="checkout_url" value="">
+                                <a id="bg" class="eo-sh-close-button">Close</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-
-                <button id="signupbutton" style="margin-top:0px; width: 60%;height: 40px; margin: -15px auto; justify-content: center; display: block; color: #fff; background: #573b8a; font-size: 1em; font-weight: bold;margin-top: 20px; outline: none; border: none; border-radius: 5px; transition: .2s ease-in; cursor: pointer;">Sign up</button>
-
-				<button id="login" style="width: 60%; height: 40px; margin: -15px auto; justify-content: center; display: block; color: #fff; background: #573b8a; font-size: 1em; font-weight: bold; margin-top: 20px;outline: none; border: none; border-radius: 5px; transition: .2s ease-in; cursor: pointer;">Login</button>
-
-
-			</form>
+            </div>
         </div>
-    <a href="#modal-closed" class="link-2" id="close-model"> </a>
-
-  </div>
+    </div>
 </div>
 
+
+<div class="success wrapper" id="eo-sh-success-message-div" style="display:none;">
+    <div class="overlay">
+        <div class="overlay-text">
+            <div class="congo-logo">
+                <img src="{{ 'Tick_icon.png' | asset_url }}" width="35" height="55" />
+            </div>
+            <div class="text">
+                <div class="congo-text">
+                    <h1>Congratulations!</h1>
+                </div>
+                <div class="waiting-list">
+                    <p>You are currently #184 on the waiting list,</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {% schema %}

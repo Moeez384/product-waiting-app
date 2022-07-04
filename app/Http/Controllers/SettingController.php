@@ -13,8 +13,11 @@ class SettingController extends Controller
 
     public function index()
     {
-        $generalSettings = Setting::where('user_id', Auth::user()->id)->first();
-        $messages = Message::where('user_id', Auth::user()->id)->first();
+        $generalSettings = Setting::where('user_id', Auth::user()->id)
+            ->first();
+
+        $messages = Message::where('user_id', Auth::user()->id)
+            ->first();
 
         if (!$generalSettings && !$messages) {
             return view('settings.generalSettings')
@@ -52,6 +55,8 @@ class SettingController extends Controller
         $messages['email_already_exist_message'] = '';
         $messages['does_not_have_account_message'] = '';
         $messages['product_already_in_the_waiting_message'] = '';
+        $messages['product_in_the_waiting_list_button_message'] = '';
+
         return $messages;
     }
 
@@ -64,15 +69,20 @@ class SettingController extends Controller
             'admin_email' => 'required|email',
         ]);
 
-        $setting = Setting::where('user_id', Auth::user()->id)->first();
+        $setting = Setting::where('user_id', Auth::user()->id)
+            ->first();
 
         try {
             if ($setting) {
                 $this->update($request, $setting->id);
-                return response()->json('Settings Updated Successfully');
+
+                return response()
+                    ->json('Settings Updated Successfully');
             } else {
                 $this->store($request);
-                return response()->json('Settings Saved Successfully');
+
+                return response()
+                    ->json('Settings Saved Successfully');
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -110,15 +120,20 @@ class SettingController extends Controller
 
     public function saveMessages(Request $request)
     {
-        $messages = Message::where('user_id', Auth::user()->id)->first();
+        $messages = Message::where('user_id', Auth::user()->id)
+            ->first();
 
         try {
             if ($messages) {
                 $this->updateMessages($request, $messages->id);
-                return response()->json('Messages Updated Successfully');
+
+                return response()
+                    ->json('Messages Updated Successfully');
             } else {
                 $this->storeMessages($request);
-                return response()->json('Messages Saved Successfully');
+
+                return response()
+                    ->json('Messages Saved Successfully');
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -135,6 +150,7 @@ class SettingController extends Controller
             'email_already_exist_message' => $messages['email_already_exist_message'],
             'does_not_have_account_message' => $messages['does_not_have_account_message'],
             'product_already_in_the_waiting_message' => $messages['product_already_in_the_waiting_message'],
+            'product_in_the_waiting_list_button_message' => $messages['product_in_the_waiting_list_button_message'],
         ]);
 
         return;
@@ -147,6 +163,7 @@ class SettingController extends Controller
             'email_already_exist_message' => $messages['email_already_exist_message'],
             'does_not_have_account_message' => $messages['does_not_have_account_message'],
             'product_already_in_the_waiting_message' => $messages['product_already_in_the_waiting_message'],
+            'product_in_the_waiting_list_button_message' => $messages['product_in_the_waiting_list_button_message'],
         ]);
 
         return;

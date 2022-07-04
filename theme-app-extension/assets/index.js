@@ -1,37 +1,5 @@
 $(document).ready(function() {
 
-    $("#eo-sh-register-button").click((e) => {
-        $("#eo-sh-login-div").hide();
-        $("#eo-sh-register-div").show();
-    });
-
-    $("#eo-sh-login-button").click((e) => {
-        $("#eo-sh-login-div").show();
-        $("#eo-sh-register-div").hide();
-    });
-
-    $("#signup").click((e) => {
-        e.preventDefault();
-        $("#loginForm").hide();
-        $("#signUpForm").show();
-    });
-
-    $("#login").click((e) => {
-        e.preventDefault();
-        $("#loginForm").show();
-        $("#signUpForm").hide();
-    });
-
-    $("#customerLogin").click(() => {
-        localStorage.setItem("flag", 1);
-    });
-
-    $("#eo-sh-login-form-button").click(() => {
-        localStorage.setItem("flag", 1);
-    });
-
-
-
     $("#checkout_url").val(window.location.href);
 
     var url = window.location.href;
@@ -41,6 +9,43 @@ $(document).ready(function() {
     var handle = $("a.product__title").attr("href").slice(10);
 
     url = url.substring(0, 57);
+
+
+    $("#eo-sh-login-heading").click((e) => {
+        e.preventDefault();
+        $(".eo-sh-register-div").hide();
+        $(".eo-sh-login-div").show();
+
+        $(".login-register .register").css({
+            "background-color": "#E0EDF3",
+            "border": "1px solid #E0EDF3",
+        });
+
+        $(".login-register .login").css({
+            "background-color": "#069CE2",
+            "border": "1px solid #069CE2",
+        });
+    });
+
+    $("#eo-sh-register-heading").click((e) => {
+        e.preventDefault();
+        $(".eo-sh-login-div").hide();
+        $(".eo-sh-register-div").show();
+
+        $(".login-register .register").css({
+            "background-color": "#069CE2",
+            "border": "1px solid #069CE2",
+        });
+
+        $(".login-register .login").css({
+            "background-color": "#E0EDF3",
+            "border": "1px solid #E0EDF3",
+        });
+    });
+
+    $("#eo-sh-login-form-button").click(() => {
+        localStorage.setItem("flag", 1);
+    });
 
     if (productUrl == "https://product-waiting-app.myshopify.com/products") {
         $(".app-loader").show();
@@ -63,9 +68,10 @@ $(document).ready(function() {
                         $(".product-form__submit").hide();
                         $(".shopify-payment-button").hide();
 
-                        $(".eo-sh-waiting-list-button").show();
-                        $(".eo-sh-waiting-list-button").text('you are in the waiting list');
-                        $(".eo-sh-waiting-list-button").css({
+                        $(".eo-sh-waiting-list-button").hide();
+                        $(".eo-sh-message-button").show();
+                        $(".eo-sh-message-button").text(response.button_message);
+                        $(".eo-sh-message-button").css({
                             "color": response.setting.waiting_list_button_text_color,
                             "background-color": response.setting.waiting_list_button_bg_color,
                             "width": "75%",
@@ -107,9 +113,8 @@ $(document).ready(function() {
         });
     }
 
-
-
     if (localStorage.getItem("flag") == 1 && __st.cid) {
+
         $.ajax({
             url: baseURL + 'api/login-customer',
             type: 'GET',
@@ -123,8 +128,15 @@ $(document).ready(function() {
             contentType: "json",
             dataType: "json",
             success: function(response) {
-                toastr.success(response);
+                // toastr.success(response);
                 localStorage.removeItem('flag');
+
+                $("#eo-sh-success-message-div").show();
+                $(".waiting-list p").text(response.success_message);
+
+                setTimeout(() => {
+                    $("#eo-sh-success-message-div").fadeOut();
+                }, 4000);
             },
             error: function(response) {
                 if (response.status == 404) {
@@ -139,7 +151,8 @@ $(document).ready(function() {
     $("#eo-sh-register-form-button").off().click((e) => {
 
         e.preventDefault();
-        $(".fa-spin").show();
+        $("#eo-sh-spiner").addClass("fa-spinner");
+        $("#eo-sh-spiner").addClass("fa-spin");
 
         let email = $("#eo-sh-register-email").val();
         let password = $("#eo-sh-register-password").val();
@@ -158,32 +171,51 @@ $(document).ready(function() {
             contentType: "json",
             dataType: "json",
             success: function(response) {
-                toastr.success(response);
+                // toastr.success(response);
                 $(".eo-sh-form").find("input[type=password],input[type=email]").val("");
                 toggleModal();
+                $("#eo-sh-success-message-div").show();
+                $(".waiting-list p").text(response.success_message);
+
+                setTimeout(() => {
+                    $("#eo-sh-success-message-div").fadeOut();
+                }, 4000);
+
+                $(".eo-sh-waiting-list-button").hide();
+                $(".eo-sh-message-button").show();
+                $(".eo-sh-message-button").text(response.button_message);
+                $(".eo-sh-message-button").css({
+                    "color": response.setting.waiting_list_button_text_color,
+                    "background-color": response.setting.waiting_list_button_bg_color,
+                    "width": "75%",
+                    "padding": "15px 0px",
+                    "border": "none",
+                });
             },
             error: function(response) {
-
                 if (response.responseJSON.errors) {
                     if (response.responseJSON.errors.email) {
-                        $("#eo-sh-register-email-error ul li").show();
-                        $("#eo-sh-register-email-error ul li").text(response.responseJSON.errors.email[0]);
+                        $("#eo-sh-register-email-error").show();
+                        $("#eo-sh-register-email-error").text(response.responseJSON.errors.email[0]);
                     }
                     if (response.responseJSON.errors.password[0]) {
-                        $("#eo-sh-register-password-error ul li").show();
-                        $("#eo-sh-register-password-error ul li").text(response.responseJSON.errors.password[0]);
+                        $("#eo-sh-register-password-error").show();
+                        $("#eo-sh-register-password-error").text(response.responseJSON.errors.password[0]);
                     }
                     setTimeout(() => {
-                        $("#eo-sh-register-email-error ul li").hide();
-                        $("#eo-sh-register-password-error ul li").hide();
-                    }, 2000);
+                        $("#eo-sh-register-email-error").hide();
+                        $("#eo-sh-register-password-error").hide();
+                    }, 4000);
                 }
                 if (response.status == 404) {
-                    console.log("hello")
                     toastr.error(response.responseJSON);
+                    $("#eo-sh-register-email").val('');
+                    $("#eo-sh-register-password").val('');
                 }
                 if (response.status == 444) {
                     toastr.error(response.responseJSON);
+                    $("#eo-sh-register-email").val('');
+                    $("#eo-sh-register-password").val('');
                 }
             },
         });
@@ -191,13 +223,16 @@ $(document).ready(function() {
 
     function toggleModal() {
         modal.classList.toggle("show-modal");
-        $(".fa-spin").css("display", "none");
     }
 
     $("#contactUsSubmit").click((e) => {
         e.preventDefault();
         let email = $("#contactEmail").val();
+    });
 
+    $(".eo-sh-close-modal-button").click((e) => {
+        e.preventDefault();
+        toggleModal();
     });
 
 });
